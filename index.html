@@ -15,27 +15,27 @@
 <div id="poke-app">
 
   <!-- Affichage dynamique du message (via interpolation) qui provient de l'état réactif dans Vue.js -->
-  <h1>PokéCount</h1>
+  <h1>{{ message }}</h1>
 
   <!-- Lien vers le Pokédex  -->
   <a class="button" href="https://www.pokemon.com/fr/pokedex">
     Ouvrir le Pokédex
   </a>
 
-  <div class="captures">Pokémons capturés: 0</div>
+  <div class="captures">Pokémons capturés: {{ compteur }}</div>
 
   <!-- Bouton pour capturer des Pokémon -->
-  <button>Capturer 🐢</button>
+  <button @click="capturer">Capturer 🐢</button>
 
   <!-- Bouton pour sauvegarder les captures -->
-  <button disabled>Sauver 💾</button>
+  <button @click="sauver" :disabled="compteur < 1">Sauver 💾</button>
 
   <!-- Liste du nombre de captures de Pokémon -->
- <ul id="captures">
-    <li>7</li>
-    <li>4</li>
-    <li>1</li>
-  </ul>
+<ul id="captures">
+    <li v-for="(capture, index) in capturesTab" :key="index">
+       {{ index }} - {{ capture }}
+    </li>
+</ul>
 
   <!-- Message affiché si pas de captures -->
   <p v-else>N'oublie pas de sauvegarder tes captures</p>
@@ -52,7 +52,8 @@
   <!-- Le bouton est désactivé pas de captures -->
   <button class="chaud">Supprimer les captures 🗑️</button>
 </div>
-
+<!-- Ajout de Vue.js via un CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <!-- Inclusion du fichier JavaScript contenant la logique de l'application Vue.js -->
 <script src="script.js"></script>
 </body>
