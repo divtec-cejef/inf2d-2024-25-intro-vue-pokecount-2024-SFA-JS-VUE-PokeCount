@@ -18,30 +18,54 @@
   <h1>{{ message }}</h1>
 
   <!-- Lien vers le Pokédex  -->
-  <a class="button" href="https://www.pokemon.com/fr/pokedex">
+  <a class="button"
+     href="https://www.pokemon.com/fr/pokedex"
+     @click.prevent="verifierAvantDeQuitter"
+  >
     Ouvrir le Pokédex
   </a>
 
-  <div class="captures">Pokémons capturés: {{ compteur }}</div>
+  <div class="captures">Pokémons capturés:
+    <input v-model.number="compteur"
+           type="text"
+           @keyup.enter="sauver"
+           ref="inputCapture"
+    >
+  </div>
 
   <!-- Bouton pour capturer des Pokémon -->
-  <button @click="capturer">Capturer 🐢</button>
+  <button @click="capturer"
+          :class="{ chaud: ilFautSauvegarder}"
+  >
+    Capturer 🐢
+  </button>
 
   <!-- Bouton pour sauvegarder les captures -->
-  <button @click="sauver" :disabled="compteur < 1">Sauver 💾</button>
+  <button @click="sauver"
+          :disabled="isNaN(compteur) || compteur < 1"
+  >
+    Sauver 💾
+  </button>
+  <p v-if="isNaN(compteur) || compteur < 1" class="error">
+    Veuillez entrer un nombre valide supérieur à 0.
+  </p>
 
-  <!-- Liste du nombre de captures de Pokémon -->
-<ul id="captures">
-    <li v-for="(capture, index) in capturesTab" :key="index">
-       {{ index }} - {{ capture }}
-    </li>
-</ul>
+  <!-- Si le tableau des captures est vide -->
+  <p v-if="capturesTab.length === 0">Aucune capture pour le moment.</p>
+  <!-- Sinon on affiche la liste du nombre de captures de Pokémon -->
+  <ul v-else id="captures">
+      <li v-for="(capture, index) in capturesTab" :key="index"
+          @dblclick="capturesTab.splice(index, 1)"
+      >
+         {{ index }} - {{ capture }}
+      </li>
+  </ul>
 
   <!-- Message affiché si pas de captures -->
-  <p v-else>N'oublie pas de sauvegarder tes captures</p>
+  <p>N'oublie pas de sauvegarder tes captures</p>
 
   <!-- Affichage dynamique du grand total des Pokémon capturés  -->
-  <p class="total">Pokémons sauvegardés 0</p>
+  <p class="total">Pokémons sauvegardés {{ totalPokemons }}</p>
 
   <!-- Message spécial affiché si le nombre total de Pokémon capturés dépasse 9 -->
   <p class="chasseur">
@@ -50,7 +74,7 @@
 
   <!-- Bouton pour supprimer toutes les captures -->
   <!-- Le bouton est désactivé pas de captures -->
-  <button class="chaud">Supprimer les captures 🗑️</button>
+  <button class="chaud" @click="capturesTab = []">Supprimer les captures 🗑️</button>
 </div>
 <!-- Ajout de Vue.js via un CDN -->
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
