@@ -3,7 +3,7 @@
  * @author Steve Fallet
  * @date 2024-09-17
  */
-const { createApp, ref, computed, onMounted, watch } = Vue;
+const { createApp, ref, computed, onMounted, watch, useTemplateRef } = Vue;
 
 const app = createApp({
     setup() {
@@ -15,7 +15,7 @@ const app = createApp({
         const ilFautSauvegarder = ref(false);
 
         // Objets HTML
-        const inputCapture = ref(null);
+        const inputCapture = useTemplateRef("inputCapture");
 
         // Fonctions
         function capturer() {
